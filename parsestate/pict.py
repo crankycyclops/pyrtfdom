@@ -184,7 +184,7 @@ class PictState(ParseState):
 	# beautiful solution, but it works *really* well. Prepare your nose for a
 	# code smell (this is mostly a cut-and-paste from the ParseState class's
 	# method with the call to self._parseCharacter removed.)
-	def _parse(self):
+	def parse(self):
 
 		if self._parser._content:
 

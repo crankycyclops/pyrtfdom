@@ -184,14 +184,13 @@ class PictState(ParseState):
 	# beautiful solution, but it works *really* well. Prepare your nose for a
 	# code smell (this is mostly a cut-and-paste from the ParseState class's
 	# method with the call to self._parseCharacter removed.)
-	def _parse(self):
+	def parse(self):
 
 		if self._parser._content:
 
 			self._parser._curToken = self._getNextToken()
 
 			while TokenType.EOF != self._parser._curToken[0]:
-
 				if TokenType.OPEN_BRACE == self._parser._curToken[0]:
 					if not self._parseOpenBrace():
 						return
@@ -205,17 +204,17 @@ class PictState(ParseState):
 				# appending tokens to any special destination or group that
 				# might contain control words.
 				elif TokenType.CONTROL_WORDORSYM == self._parser._curToken[0]:
-					tokenParts = self.__splitControlWord(self._parser._curToken)
+					tokenParts = self._splitControlWord(self._parser._curToken)
 					if not self._parseControl(tokenParts[0], tokenParts[1]):
 						return
 
 				### Begin code that diverges from ParseState.parse() ###
 
 				elif 'inBlipUID' in self._parser._curState['private'] and self._parser._curState['private']['inBlipUID']:
-					self.__blipUIDBuffer += token
+					self.__blipUIDBuffer += self._parser._curToken[1]
 
-				elif not token.isspace():
-					self.__data += token
+				elif not self._parser._curToken[1].isspace():
+					self.__data += self._parser._curToken[1]
 
 				###  End code that diverges from ParseState.parse()  ###
 
